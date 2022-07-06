@@ -2,7 +2,7 @@
 
 wxIMPLEMENT_APP(App);
 
-App::~App() {
+App::App() {
 
 }
 
