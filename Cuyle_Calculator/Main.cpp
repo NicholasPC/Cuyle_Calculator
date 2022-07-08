@@ -8,7 +8,7 @@ Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 2
 	function = new wxButton * [17];
 
 	screen = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(210, 70), wxTE_READONLY);
-	clearScreen = new wxButton(this, wxID_ANY, "C", wxPoint(210, 0), wxSize(70, 70));
+	clearScreen = new wxButton(this, 11016, "C", wxPoint(210, 0), wxSize(70, 70));
 	function[0] = clearScreen;
 
 	zero = new wxButton(this, 11000, "0", wxPoint(70, 280), wxSize(70, 70));
@@ -75,6 +75,9 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 			break;
 		case 15:
 			*screen << "/";
+			break;
+		case 16:
+			screen->Clear();
 			break;
 		}
 	}
