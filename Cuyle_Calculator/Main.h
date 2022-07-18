@@ -1,6 +1,7 @@
 #pragma once
 #include "wx/wx.h"
 #include "Factory.h"
+#include "Processor.h"
 
 class Main : public wxFrame
 {
@@ -33,6 +34,9 @@ public:
 	wxButton* divide = nullptr;
 
 	wxButton** function;
+
+	unsigned char mode = 10;
+	Processor* calculator;
 
 
 

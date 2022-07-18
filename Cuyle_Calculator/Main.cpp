@@ -14,18 +14,6 @@ Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 2
 	function[0] = clearScreen;
 
 
-	/*zero = new wxButton(this, 11000, "0", wxPoint(70, 280), wxSize(70, 70));
-	one = new wxButton(this, 11001, "1", wxPoint(0, 210), wxSize(70, 70));
-	two = new wxButton(this, 11002, "2", wxPoint(70, 210), wxSize(70, 70));
-	three = new wxButton(this, 11003, "3", wxPoint(140, 210), wxSize(70, 70));
-	four = new wxButton(this, 11004, "4", wxPoint(0, 140), wxSize(70, 70));
-	five = new wxButton(this, 11005, "5", wxPoint(70, 140), wxSize(70, 70));
-	six = new wxButton(this, 11006, "6", wxPoint(140, 140), wxSize(70, 70));
-	seven = new wxButton(this, 11007, "7", wxPoint(0, 70), wxSize(70, 70));
-	eight = new wxButton(this, 11008, "8", wxPoint(70, 70), wxSize(70, 70));
-	nine = new wxButton(this, 11009, "9", wxPoint(140, 70), wxSize(70, 70));*/
-
-
 	zero = Factory::create1(this);
 	one = Factory::create2(this);
 	two = Factory::create3(this);
@@ -45,6 +33,8 @@ Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 2
 	divide = Factory::create16(this);
 
 	
+	
+
 	function[1] = zero;
 	function[2] = one;
 	function[3] = two;
@@ -56,13 +46,6 @@ Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 2
 	function[9] = eight;
 	function[10] = nine;
 
-	/*mod = new wxButton(this, 11010, "%", wxPoint(0, 280), wxSize(70, 70));
-	equals = new wxButton(this, 11011, "=", wxPoint(140, 280), wxSize(70, 70));
-	plus = new wxButton(this, 11012, "+", wxPoint(210, 70), wxSize(70, 70));
-	minus = new wxButton(this, 11013, "-", wxPoint(210, 140), wxSize(70, 70));
-	multiply = new wxButton(this, 11014, "*", wxPoint(210, 210), wxSize(70, 70));
-	divide = new wxButton(this, 11015, "/", wxPoint(210, 280), wxSize(70, 70));*/
-	
 	function[11] = mod;
 	function[12] = equals;
 	function[13] = plus;
@@ -84,21 +67,27 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 	else {
 		switch (temp) {
 		case 10:
+			calculator->calculation(screen, mode, mode);
 			*screen << "%";
 			break;
 		case 11:
-			*screen << "=";
+			calculator->calculation(screen, mode, mode);
+			//*screen << "=";
 				break;
 		case 12:
+			calculator->calculation(screen, mode, mode);
 			*screen << "+";
 			break;
 		case 13:
+			calculator->calculation(screen, mode, mode);
 			*screen << "-";
 			break;
 		case 14:
+			calculator->calculation(screen, mode, mode);
 			*screen << "*";
 			break;
 		case 15:
+			calculator->calculation(screen, mode, mode);
 			*screen << "/";
 			break;
 		case 16:

@@ -2,11 +2,7 @@
 #include "wx/wx.h"
 
 
-wxButton* Factory::create1(wxWindow* frame)
-{
-	return new wxButton(frame, 11000, "0", wxPoint(70, 280), wxSize(70, 70));
-
-}
+wxButton* Factory::create1(wxWindow* frame) {return new wxButton(frame, 11000, "0", wxPoint(70, 280), wxSize(70, 70));}
 wxButton* Factory::create2(wxWindow* frame) {return new wxButton(frame, 11001, "1", wxPoint(0, 210), wxSize(70, 70));}
 wxButton* Factory::create3(wxWindow* frame) {return new wxButton(frame, 11002, "2", wxPoint(70, 210), wxSize(70, 70));}
 wxButton* Factory::create4(wxWindow* frame) {return new wxButton(frame, 11003, "3", wxPoint(140, 210), wxSize(70, 70));}
@@ -23,6 +19,9 @@ wxButton* Factory::create14(wxWindow* frame) {return new wxButton(frame, 11013, 
 wxButton* Factory::create15(wxWindow* frame) {return new wxButton(frame, 11014, "*", wxPoint(210, 210), wxSize(70, 70));}
 wxButton* Factory::create16(wxWindow* frame) {return new wxButton(frame, 11015, "/", wxPoint(210, 280), wxSize(70, 70));}
 
+//wxButton* Factory::makeButton(wxFrame* frame, std::string name) {return new wxButton(frame, ) }
+
+//wxButton** Factory::makeButton(wxFrame* frame){}
 
 
 

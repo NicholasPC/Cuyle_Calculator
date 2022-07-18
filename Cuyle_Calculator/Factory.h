@@ -19,5 +19,8 @@ public:
 	 static wxButton* create14(wxWindow* frame);
 	 static wxButton* create15(wxWindow* frame);
 	 static wxButton* create16(wxWindow* frame);
+
+	 //static wxButton* makeButton(wxFrame* frame, std::string name);
+	 //static wxButton** makeButton(wxFrame* frame);
 };
 
