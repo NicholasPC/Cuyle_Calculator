@@ -12,6 +12,8 @@ public:
 	void ButtonClicked(wxCommandEvent& evt);
 
 public:
+	wxButton* clearScreen = nullptr;
+
 	wxTextCtrl* screen = nullptr;
 
 	wxButton* zero = nullptr;
@@ -24,14 +26,24 @@ public:
 	wxButton* seven = nullptr;
 	wxButton* eight = nullptr;
 	wxButton* nine = nullptr;
+
+	wxButton* a = nullptr;
+	wxButton* b = nullptr;
+	wxButton* c = nullptr;
+	wxButton* d = nullptr;
+	wxButton* e = nullptr;
+	wxButton* f = nullptr;
 	
-	wxButton* clearScreen = nullptr;
 	wxButton* mod = nullptr;
 	wxButton* equals = nullptr;
 	wxButton* plus = nullptr;
 	wxButton* minus = nullptr;
 	wxButton* multiply = nullptr;
 	wxButton* divide = nullptr;
+
+	wxButton* decMode = nullptr;
+	wxButton* hexMode = nullptr;
+	wxButton* binMode = nullptr;
 
 	wxButton** function;
 

@@ -1,10 +1,13 @@
 #include "Processor.h"
 
 Processor* Processor::calc = nullptr;
+
 Processor* Processor::GetInstance() {
+
 	if (Processor::calc == nullptr) {
 		Processor::calc = new Processor;
 	}
+
 	return Processor::calc;
 }
 
@@ -14,6 +17,7 @@ void Processor::calculation(wxTextCtrl* screen, unsigned char in, unsigned char 
 	long long fin = 0;
 	long long first = 0;
 	char symb = ' ';
+	bool flipped = false;
 	for (size_t i = 0; i < input.length(); i++) {
 		switch (input[i]) {
 		case '+':
@@ -21,26 +25,23 @@ void Processor::calculation(wxTextCtrl* screen, unsigned char in, unsigned char 
 		case'*':
 		case'/':
 		case '%':
-			if (symb == ' ') {
-				fin = first;
-			}
-			else {
-				switch (symb) {
-				case '+':
-					fin += first;
-					break;
-				case '-':
-					fin -= first;
-				case '*':
-					fin *= first;
-				case '/':
-					fin /= first;
-				}
-			}
-
-			//first = 0;
+			fin = first;
+			first = 0;
 			symb = input[i];
 			break;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+			first *= in;
+			first += input[i] - 'A' + 10;
+			break;
+
+		default:
+			first *= in;
+			first += input[i] - '0';
 		}
 	}
 
@@ -49,10 +50,29 @@ void Processor::calculation(wxTextCtrl* screen, unsigned char in, unsigned char 
 		fin = first;
 		break;
 	case'+':
-		fin += first;
+		if (flipped) {
+			if (first >= fin) {
+				flipped = false;
+				fin = first - fin;
+			}
+			else
+				fin -= first;
+		}
+		else {
+			fin += first;
+		}
 		break;
 	case'-':
-		fin -= first;
+		if (flipped) {
+			fin += first;
+		}
+		else if (first > fin) {
+			fin = first - fin;
+			flipped = true;
+		}
+		else {
+			fin -= first;
+		}
 		break;
 	case'*':
 		fin *= first;
@@ -64,37 +84,28 @@ void Processor::calculation(wxTextCtrl* screen, unsigned char in, unsigned char 
 		fin %= first;
 	}
 
-	//first = 0;
-
-	std::string negate = "";
-	bool flipped = fin < 0;
-	if (flipped)
-		fin = -fin;
-
-	switch (out) {
-	case 2:
-		for (; fin > 0; fin /= 2)
-			negate.insert(0, std::to_string(fin % 2));
-		if (flipped)
-			negate.insert(0, "-");
-
-		*screen << negate;
-		break;
-
-	case 8:
-		for (; fin > 0; fin /= 8)
-			negate.insert(0, std::to_string(fin % 8));
-		if (flipped)
-			negate.insert(0, "-");
-
-		*screen << negate;
-		break;
-
-	case 10:
-		if (flipped)
-			fin = -fin;
-
-		*screen << std::to_string(fin);
-		break;
+	std::string output = "";
+	if (fin == 0) {
+		flipped = false;
+		output = "";
 	}
+
+	for (; fin > 0; fin /= out) {
+		switch (fin % out) {
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+			output.insert(0, std::string(1, (fin % out - 10) + 'A'));
+			break;
+
+		default:
+			output.insert(0, std::to_string(fin % out));
+		}
+	}
+	if (flipped)
+		output.insert(0, "-");
+	*screen << output;
 }

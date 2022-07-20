@@ -4,33 +4,44 @@
 wxBEGIN_EVENT_TABLE(Main, wxFrame)
 wxEND_EVENT_TABLE()
 
-Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 200), wxSize(296, 390)) {
+Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 200), wxSize(507, 390)) {
 
 	
 	function = new wxButton * [17];
 
-	screen = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(210, 70), wxTE_READONLY);
-	clearScreen = new wxButton(this, 11016, "C", wxPoint(210, 0), wxSize(70, 70));
+	screen = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(490, 70), wxTE_READONLY);
+	clearScreen = Factory::createClear(this);
 	function[0] = clearScreen;
 
 
-	zero = Factory::create1(this);
-	one = Factory::create2(this);
-	two = Factory::create3(this);
-	three = Factory::create4(this);
-	four = Factory::create5(this);
-	five = Factory::create6(this);
-	six = Factory::create7(this);
-	seven = Factory::create8(this);
-	eight = Factory::create9(this);
-	nine = Factory::create10(this);
+	zero = Factory::create0(this);
+	one = Factory::create1(this);
+	two = Factory::create2(this);
+	three = Factory::create3(this);
+	four = Factory::create4(this);
+	five = Factory::create5(this);
+	six = Factory::create6(this);
+	seven = Factory::create7(this);
+	eight = Factory::create8(this);
+	nine = Factory::create9(this);
 
-	mod = Factory::create11(this);
-	equals = Factory::create12(this);
-	plus = Factory::create13(this);
-	minus = Factory::create14(this);
-	multiply = Factory::create15(this);
-	divide = Factory::create16(this);
+	a = Factory::createA(this);
+	b = Factory::createB(this);
+	c = Factory::createC(this);
+	d = Factory::createD(this);
+	e = Factory::createE(this);
+	f = Factory::createF(this);
+
+	mod = Factory::createMod(this);
+	equals = Factory::createEqual(this);
+	plus = Factory::createPlus(this);
+	minus = Factory::createMinus(this);
+	multiply = Factory::createMult(this);
+	divide = Factory::createDiv(this);
+
+	decMode = Factory::createDecMode(this);
+	hexMode = Factory::createHexMode(this);
+	binMode = Factory::createBinMode(this);
 
 	
 	
@@ -66,34 +77,82 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 	}
 	else {
 		switch (temp) {
-		case 10:
-			calculator->calculation(screen, mode, mode);
-			*screen << "%";
+		case 8:
+		case 9:
+			if (mode == 2 || mode == 8);
 			break;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			if (mode == 2)
+				break;
+		case 0:
+		case 1:
+			*screen << temp;
+			break;
+		case 10:
 		case 11:
 			calculator->calculation(screen, mode, mode);
-			//*screen << "=";
-				break;
 		case 12:
+		case 13:
+		case 14:
+		case 15:
+			if (mode == 16)
+				*screen << (char)('A' + (temp - 10));
+			break;
+		case 16:
 			calculator->calculation(screen, mode, mode);
 			*screen << "+";
 			break;
-		case 13:
+		case 17:
 			calculator->calculation(screen, mode, mode);
+			if (screen->GetLineText(0).ToStdString() == "0")
+				screen->Clear();
+
 			*screen << "-";
 			break;
-		case 14:
+		case 18:
 			calculator->calculation(screen, mode, mode);
 			*screen << "*";
 			break;
-		case 15:
+		case 19:
 			calculator->calculation(screen, mode, mode);
 			*screen << "/";
 			break;
-		case 16:
+		case 20:
+			calculator->calculation(screen, mode, mode);
+			*screen << "%";
+			break;
+		case 21:
 			screen->Clear();
+			*screen << "";
+			break;
+		case 22:
+			calculator->calculation(screen, mode, 16);
+			break;
+		case 23:
+			calculator->calculation(screen, mode, 2);
+			mode = 2;
+			break;
+		case 24:
+			calculator->calculation(screen, mode, 8);
+			mode = 8;
+			break;
+		case 25:
+			calculator->calculation(screen, mode, 10);
+			mode = 10;
+			break;
+		case 26:
+			calculator->calculation(screen, mode, 16);
+			mode = 16;
 			break;
 		}
+
+		if (screen->GetLineText(0).ToStdString() == "")
+			*screen << "";
 	}
 }
 
@@ -116,6 +175,15 @@ Main::~Main() {
 	delete minus;
 	delete multiply;
 	delete divide;
+	delete decMode;
+	delete hexMode;
+	delete binMode;
+	delete a;
+	delete b;
+	delete c;
+	delete d;
+	delete e;
+	delete f;
 
 	delete[] function;
 }
