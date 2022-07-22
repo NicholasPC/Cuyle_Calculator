@@ -7,11 +7,9 @@ wxEND_EVENT_TABLE()
 Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 200), wxSize(507, 390)) {
 
 	
-	function = new wxButton * [17];
+	function = new wxButton * [26];
 
 	screen = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(490, 70), wxTE_READONLY);
-	clearScreen = Factory::createClear(this);
-	function[0] = clearScreen;
 
 
 	zero = Factory::create0(this);
@@ -43,28 +41,43 @@ Main::Main() : wxFrame(nullptr, wxID_ANY, "Cuyle Calculator WIP", wxPoint(200, 2
 	hexMode = Factory::createHexMode(this);
 	binMode = Factory::createBinMode(this);
 
+	clearScreen = Factory::createClear(this);
 	
 	
 
-	function[1] = zero;
-	function[2] = one;
-	function[3] = two;
-	function[4] = three;
-	function[5] = four;
-	function[6] = five;
-	function[7] = six;
-	function[8] = seven;
-	function[9] = eight;
-	function[10] = nine;
+	function[0] = zero;
+	function[1] = one;
+	function[2] = two;
+	function[3] = three;
+	function[4] = four;
+	function[5] = five;
+	function[6] = six;
+	function[7] = seven;
+	function[8] = eight;
+	function[9] = nine;
 
-	function[11] = mod;
-	function[12] = equals;
-	function[13] = plus;
-	function[14] = minus;
-	function[15] = multiply;
-	function[16] = divide;
+	function[10] = a;
+	function[11] = b;
+	function[12] = c;
+	function[13] = d;
+	function[14] = e;
+	function[15] = f;
 
-	for (int i = 0; i < 17; i++) {
+	function[16] = plus;
+	function[17] = minus;
+	function[18] = multiply;
+	function[19] = divide;
+	function[20] = mod;
+
+	function[21] = equals;
+
+	function[22] = decMode;
+	function[23] = hexMode;
+	function[24] = binMode;
+
+	function[25] = clearScreen;
+
+	for (int i = 0; i < 26; i++) {
 		function[i]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &Main::ButtonClicked, this);
 	}
 
@@ -77,10 +90,14 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 	}
 	else {
 		switch (temp) {
+		case 25:
+			screen->Clear();
+			*screen << "";
+			break;
 		case 8:
 		case 9:
-			if (mode == 2 || mode == 8);
-			break;
+			if (mode == 2 || mode == 8)
+				break;
 		case 2:
 		case 3:
 		case 4:
@@ -93,9 +110,9 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 		case 1:
 			*screen << temp;
 			break;
+		
 		case 10:
 		case 11:
-			calculator->calculation(screen, mode, mode);
 		case 12:
 		case 13:
 		case 14:
@@ -103,10 +120,12 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 			if (mode == 16)
 				*screen << (char)('A' + (temp - 10));
 			break;
+		
 		case 16:
 			calculator->calculation(screen, mode, mode);
 			*screen << "+";
 			break;
+		
 		case 17:
 			calculator->calculation(screen, mode, mode);
 			if (screen->GetLineText(0).ToStdString() == "0")
@@ -114,41 +133,41 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 
 			*screen << "-";
 			break;
+		
 		case 18:
 			calculator->calculation(screen, mode, mode);
 			*screen << "*";
 			break;
+
 		case 19:
 			calculator->calculation(screen, mode, mode);
 			*screen << "/";
 			break;
+
 		case 20:
 			calculator->calculation(screen, mode, mode);
 			*screen << "%";
 			break;
+		
 		case 21:
-			screen->Clear();
-			*screen << "";
+			calculator->calculation(screen, mode, mode);
 			break;
+		
 		case 22:
-			calculator->calculation(screen, mode, 16);
-			break;
-		case 23:
-			calculator->calculation(screen, mode, 2);
-			mode = 2;
-			break;
-		case 24:
-			calculator->calculation(screen, mode, 8);
-			mode = 8;
-			break;
-		case 25:
 			calculator->calculation(screen, mode, 10);
 			mode = 10;
 			break;
-		case 26:
+
+		case 23:
 			calculator->calculation(screen, mode, 16);
 			mode = 16;
 			break;
+
+		case 24:
+			calculator->calculation(screen, mode, 2);
+			mode = 2;
+			break;
+
 		}
 
 		if (screen->GetLineText(0).ToStdString() == "")
@@ -158,7 +177,7 @@ void Main::ButtonClicked(wxCommandEvent& evt) {
 
 Main::~Main() {
 	delete screen;
-	delete clearScreen;
+
 	delete zero;
 	delete one;
 	delete two;
@@ -169,21 +188,28 @@ Main::~Main() {
 	delete seven;
 	delete eight;
 	delete nine;
-	delete mod;
-	delete equals;
-	delete plus;
-	delete minus;
-	delete multiply;
-	delete divide;
-	delete decMode;
-	delete hexMode;
-	delete binMode;
+
 	delete a;
 	delete b;
 	delete c;
 	delete d;
 	delete e;
 	delete f;
+
+	delete plus;
+	delete minus;
+	delete multiply;
+	delete divide;
+	delete mod;
+
+	delete equals;
+
+
+	delete decMode;
+	delete hexMode;
+	delete binMode;
+
+	delete clearScreen;
 
 	delete[] function;
 }

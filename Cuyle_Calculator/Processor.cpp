@@ -1,111 +1,143 @@
 #include "Processor.h"
 
-Processor* Processor::calc = nullptr;
+Processor &Processor::GetInstance() {
 
-Processor* Processor::GetInstance() {
-
-	if (Processor::calc == nullptr) {
-		Processor::calc = new Processor;
-	}
-
-	return Processor::calc;
+	static Processor calc = Processor();
+	return calc;
 }
 
-void Processor::calculation(wxTextCtrl* screen, unsigned char in, unsigned char out) {
-	std::string input = screen->GetLineText(0).ToStdString();
+void Processor::calculation(wxTextCtrl* screen, unsigned char modeIn, unsigned char modeOut) {
+	
+	std::string in = screen->GetLineText(0).ToStdString();
 	screen->Clear();
-	long long fin = 0;
+	long long final = 0;
 	long long first = 0;
 	char symb = ' ';
-	bool flipped = false;
-	for (size_t i = 0; i < input.length(); i++) {
-		switch (input[i]) {
+	for (size_t i = 0; i < in.length(); i++) {
+		switch (in[i]) {
 		case '+':
-		case'-':
-		case'*':
-		case'/':
+		case '-':
+		case '*':
+		case '/':
 		case '%':
-			fin = first;
+			if (symb == ' ') {
+				final = first;
+			}
+			else {
+				switch (symb) {
+				case '+':
+					final += first;
+					break;
+				case '-':
+					final -= first;
+					break;
+				case '*':
+					final *= first;
+					break;
+				case '/':
+					final /= first;
+					break;
+				case '%':
+					final %= first;
+
+				}
+			}
+
 			first = 0;
-			symb = input[i];
+			symb = in[i];
 			break;
+
 		case 'A':
 		case 'B':
 		case 'C':
 		case 'D':
 		case 'E':
 		case 'F':
-			first *= in;
-			first += input[i] - 'A' + 10;
+			first *= modeIn;
+			first += in[i] - 'A' + 10;
 			break;
 
 		default:
-			first *= in;
-			first += input[i] - '0';
+			first *= modeIn;
+			first += in[i] - '0';
 		}
 	}
 
 	switch (symb) {
 	case ' ':
-		fin = first;
+		final = first;
 		break;
+
 	case'+':
-		if (flipped) {
-			if (first >= fin) {
-				flipped = false;
-				fin = first - fin;
-			}
-			else
-				fin -= first;
-		}
-		else {
-			fin += first;
-		}
+		final += first;
 		break;
 	case'-':
-		if (flipped) {
-			fin += first;
-		}
-		else if (first > fin) {
-			fin = first - fin;
-			flipped = true;
-		}
-		else {
-			fin -= first;
-		}
+		final -= first;
 		break;
 	case'*':
-		fin *= first;
+		final *= first;
 		break;
 	case'/':
-		fin /= first;
+		final /= first;
 		break;
 	case'%':
-		fin %= first;
+		final %= first;
 	}
+	first = 0;
 
-	std::string output = "";
-	if (fin == 0) {
-		flipped = false;
-		output = "";
-	}
-
-	for (; fin > 0; fin /= out) {
-		switch (fin % out) {
-		case 10:
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-		case 15:
-			output.insert(0, std::string(1, (fin % out - 10) + 'A'));
-			break;
-
-		default:
-			output.insert(0, std::to_string(fin % out));
-		}
-	}
+	std::string out = "";
+	bool flipped = final < 0;
 	if (flipped)
-		output.insert(0, "-");
-	*screen << output;
+		final = -final;
+
+	switch (modeOut) {
+	case 2:
+		for (; final > 0; final /= 2)
+			out.insert(0, std::to_string(final % 2));
+
+		if (flipped)
+			out.insert(0, "-");
+
+		*screen << out;
+		break;
+
+	case 8:
+		for (; final > 0; final /= 8)
+			out.insert(0, std::to_string(final % 8));
+
+		if (flipped)
+			out.insert(0, "-");
+
+		*screen << out;
+		break;
+
+	case 10:
+		if (flipped)
+			final = -final;
+		*screen << std::to_string(final);
+		break;
+
+	case 16:
+		for (; final > 0; final /= 16) {
+			switch (final % 16) {
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+				out.insert(0, std::string(1, (final % 16 - 10) + 'A'));
+				break;
+
+			default:
+				out.insert(0, std::to_string(final % 16));
+			}
+		}
+		if (flipped)
+			out.insert(0, std::string(1, '-'));
+
+		*screen << out;
+		break;
+	}
+	
 }
